@@ -2,5 +2,7 @@
 name = "marvin"
 version = "0.1.0"
 authors = ["Steve Klabnik <steve@steveklabnik.com>"]
+description = "Not ready yet"
+license = "MIT/Apache-2.0"
 
 [dependencies]
