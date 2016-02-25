@@ -6,3 +6,5 @@ description = "Not ready yet"
 license = "MIT/Apache-2.0"
 
 [dependencies]
+hyper = "0.7.2"
+hubcaps = "0.1.1"
