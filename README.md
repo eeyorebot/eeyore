@@ -1,28 +1,31 @@
-# Marvin
+# Eeyore
 
-> “This is the sort of thing you lifeforms enjoy, is it?”
->
-> - Marvin, “Hitchhiker’s Guide to the Galaxy”
-
-![Marvin](marvin.jpg)
-
-Marvin is a wonderfully charming, yet very depressed robot. A lot of
+A lot of
 projects have issue trackers that feel out of control. Consider these
 other quotes, and how you feel when doing issue triage:
 
-> Marvin: I’ve been talking to the main computer.  
-> Arthur: And?  
-> Marvin: It hates me.  
+> It’s all for naught.
 
-> Marvin: I have a million ideas, but, they all point to certain death. 
+> Winnie the Pooh: "How long will that take?"
+> Eeyore: "Days. Weeks. Months. Who knows?"
 
-> Marvin: This will all end in tears.
+> Wish I could say yes, but I can’t.
 
-> Marvin: I’ve calculated your chance of survival, but I don’t think you’ll
-> like it.
+> I'm telling you. People come and go in this forest, and they say. 'It's only Eeyore, so it doesn't count.'
 
-> Marvin: Do you want me to sit in a corner and rust or just fall apart where
-> I’m standing? 
+> "It's snowing still," said Eeyore gloomily.
+> "So it is."
+> "And freezing."
+> "Is it?"
+> "Yes," said Eeyore. "However," he said, brightening up a little, "we haven't had an earthquake lately."
+
+> "Good morning, Eeyore," said Pooh.
+> "Good morning, Pooh Bear," said Eeyore gloomily. "If it is a good morning, which I doubt," said he.
+
+> Roo: Don't you ever get sick of your house falling down all the time, Eeyore?
+> Eeyore: Nope. Suppose it's just what houses do.
+> Lumpy: But houses are supposed to stay standing up.
+> Eeyore: Guess mine forgot.
 
 So why do issue trackers make us feel this way?
 
@@ -34,17 +37,17 @@ So why do issue trackers make us feel this way?
    a pipeline of issues tracking progress.
 
 Basically, Issues are wonderfully simple, but if you want a little bit more, it
-can hurt. Marvin can help.
+can hurt. Eeyore can help.
 
-## Using Marvin
+## Using Eeyore
 
 Right now, you can’t. Sorry. Still working on the initial stuff. The intention will
-be to build and release something that supports giving others traige rights without
+be to build and release something that supports giving others triage rights without
 themselves needing commit bit. In other words:
 
-1. You give Marvin commit bit on your project.
-2. You tell Marvin who can triage your project.
-3. Those users use Marvin to do issue triage, and he does it on their behalf.
+1. You give Eeyore commit bit on your project.
+2. You tell Eeyore who can triage your project.
+3. Those users use Eeyore to do issue triage, and he does it on their behalf.
 
 ## Acknowledgements
 

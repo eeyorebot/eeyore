@@ -1,5 +1,5 @@
 [root]
-name = "marvin"
+name = "eeyore"
 version = "0.1.0"
 dependencies = [
  "hubcaps 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
