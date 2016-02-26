@@ -45,3 +45,7 @@ themselves needing commit bit. In other words:
 1. You give Marvin commit bit on your project.
 2. You tell Marvin who can triage your project.
 3. Those users use Marvin to do issue triage, and he does it on their behalf.
+
+## Acknowledgements
+
+* Thank you to flickr user jdhancock for the [photo of eeyore](https://www.flickr.com/photos/jdhancock/7767340604)!
