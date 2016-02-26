@@ -4,28 +4,31 @@ A lot of
 projects have issue trackers that feel out of control. Consider these
 other quotes, and how you feel when doing issue triage:
 
-> It’s all for naught.
+> Eeyore: It’s all for naught.
 
-> Winnie the Pooh: "How long will that take?"
-> Eeyore: "Days. Weeks. Months. Who knows?"
+> Winnie the Pooh: How long will that take?  
+> Eeyore: Days. Weeks. Months. Who knows? 
 
-> Wish I could say yes, but I can’t.
+> Eeyore: Wish I could say yes, but I can’t.  
 
-> I'm telling you. People come and go in this forest, and they say. 'It's only Eeyore, so it doesn't count.'
+> Eeyore: I'm telling you. People come and go in this forest, and they say,
+> 'It's only Eeyore, so it doesn't count.'
 
-> "It's snowing still," said Eeyore gloomily.
-> "So it is."
-> "And freezing."
-> "Is it?"
-> "Yes," said Eeyore. "However," he said, brightening up a little, "we haven't had an earthquake lately."
+> "It's snowing still," said Eeyore gloomily.  
+> "So it is."  
+> "And freezing."  
+> "Is it?"  
+> "Yes," said Eeyore. "However," he said, brightening up a little, "we 
+> haven't had an earthquake lately."
 
-> "Good morning, Eeyore," said Pooh.
-> "Good morning, Pooh Bear," said Eeyore gloomily. "If it is a good morning, which I doubt," said he.
+> "Good morning, Eeyore," said Pooh.  
+> "Good morning, Pooh Bear," said Eeyore gloomily. "If it is a good 
+> morning, which I doubt," said he.
 
-> Roo: Don't you ever get sick of your house falling down all the time, Eeyore?
-> Eeyore: Nope. Suppose it's just what houses do.
-> Lumpy: But houses are supposed to stay standing up.
-> Eeyore: Guess mine forgot.
+> Roo: Don't you ever get sick of your house falling down all the time, Eeyore?  
+> Eeyore: Nope. Suppose it's just what houses do.  
+> Lumpy: But houses are supposed to stay standing up.  
+> Eeyore: Guess mine forgot.  
 
 So why do issue trackers make us feel this way?
 
