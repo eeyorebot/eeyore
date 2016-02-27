@@ -1,8 +1,11 @@
 extern crate hyper;
 extern crate hubcaps;
+extern crate iron;
 
 use hyper::Client;
 use hubcaps::Github;
+use iron::prelude::*;
+use iron::status;
 
 fn main() {
     let client = Client::new();
@@ -16,7 +19,14 @@ fn main() {
 
     let labels = repo.labels();
 
-    for l in labels.list().unwrap() {
-        println!("{:?}", l)
-    }
+    let output = labels.list().unwrap().iter().map(|label| {
+        format!("{:?}", label)
+    }).collect::<Vec<_>>().join("\n");
+
+    Iron::new(move |_: &mut Request| {
+        Ok(Response::with((
+            status::Ok,
+            &output[..]
+        )))
+    }).http("localhost:3000").unwrap();
 }
