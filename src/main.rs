@@ -2,17 +2,20 @@ extern crate hyper;
 extern crate hubcaps;
 extern crate iron;
 extern crate router;
+extern crate inth_oauth2;
 
-use hyper::Client;
 use hubcaps::Github;
 use iron::prelude::*;
 use iron::status;
-use iron::headers::ContentType;
+use iron::headers::{ContentType, Location};
 use iron::modifiers::Header;
 use router::Router;
+use inth_oauth2::provider::GitHub;
+use inth_oauth2::token::Token;
+use std::env;
 
 fn main() {
-    let client = Client::new();
+    let client = hyper::Client::new();
     let github = Github::new(
         "my-cool-user-agent/0.1.0",
         &client,
@@ -32,13 +35,59 @@ fn main() {
         Ok(Response::with((
             status::Ok,
             Header(ContentType::html()),
-            "<html><body><a href='/labels'>List Rust's Labels</a></body></html>"
+            "<html><body><div><a href='/oauth'>Log in with Github</a></div><div><a href='/labels'>List Rust's Labels</a></div></body></html>"
         )))
     });
+
     router.get("/labels", move |_: &mut Request| {
         Ok(Response::with((
             status::Ok,
             &output[..]
+        )))
+    });
+
+    router.get("/oauth", |_: &mut Request| {
+        let oauth_client = inth_oauth2::Client::<GitHub>::new(
+            env::var("CLIENT_ID").expect("Github OAuth CLIENT_ID must be specified"),
+            env::var("CLIENT_SECRET").expect("Github OAuth CLIENT_SECRET must be specified"),
+            env::var("REDIRECT_URI").ok()
+        );
+
+        let auth_uri = oauth_client.auth_uri(Some("write:repo_hook,public_repo"), None).unwrap();
+        Ok(Response::with((
+            status::Found,
+            Header(Location(auth_uri.to_string())),
+            format!("You are being <a href='{}'>redirected</a>.", auth_uri),
+        )))
+    });
+
+    router.get("/callback", |request: &mut Request| {
+        let oauth_client = inth_oauth2::Client::<GitHub>::new(
+            env::var("CLIENT_ID").expect("Github OAuth CLIENT_ID must be specified"),
+            env::var("CLIENT_SECRET").expect("Github OAuth CLIENT_SECRET must be specified"),
+            env::var("REDIRECT_URI").ok()
+        );
+
+        let url = request.url.clone();
+        let generic_url = url.into_generic_url();
+
+        let query_params = generic_url.query_pairs().unwrap();
+        let (_, code) = query_params.into_iter().find(|&(ref key, _)| {
+            *key == String::from("code")
+        }).unwrap();
+        let bearer_token = oauth_client.request_token(&Default::default(), code.trim()).unwrap();
+
+        let user_client = hyper::Client::new();
+        let user_github = Github::new(
+            "my-cool-user-agent/0.1.0",
+            &user_client,
+            Some(bearer_token.access_token()),
+        );
+        let repos = user_github.repos().list();
+
+        Ok(Response::with((
+            status::Ok,
+            format!("{:?}", repos),
         )))
     });
 
