@@ -25,11 +25,7 @@ fn main() {
     });
 
     router.get("/oauth", |_: &mut Request| {
-        let oauth_client = inth_oauth2::Client::<GitHub>::new(
-            env::var("CLIENT_ID").expect("Github OAuth CLIENT_ID must be specified"),
-            env::var("CLIENT_SECRET").expect("Github OAuth CLIENT_SECRET must be specified"),
-            env::var("REDIRECT_URI").ok()
-        );
+        let oauth_client = github_client();
 
         let auth_uri = oauth_client.auth_uri(Some("write:repo_hook,public_repo"), None).unwrap();
         Ok(Response::with((
@@ -40,11 +36,7 @@ fn main() {
     });
 
     router.get("/callback", |request: &mut Request| {
-        let oauth_client = inth_oauth2::Client::<GitHub>::new(
-            env::var("CLIENT_ID").expect("Github OAuth CLIENT_ID must be specified"),
-            env::var("CLIENT_SECRET").expect("Github OAuth CLIENT_SECRET must be specified"),
-            env::var("REDIRECT_URI").ok()
-        );
+        let oauth_client = github_client();
 
         let url = request.url.clone();
         let generic_url = url.into_generic_url();
@@ -70,4 +62,12 @@ fn main() {
     });
 
     Iron::new(router).http("localhost:3000").unwrap();
+}
+
+fn github_client() -> inth_oauth2::Client<GitHub> {
+    inth_oauth2::Client::<GitHub>::new(
+        env::var("CLIENT_ID").expect("Github OAuth CLIENT_ID must be specified"),
+        env::var("CLIENT_SECRET").expect("Github OAuth CLIENT_SECRET must be specified"),
+        env::var("REDIRECT_URI").ok()
+    )
 }
