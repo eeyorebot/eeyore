@@ -3,18 +3,25 @@ extern crate hubcaps;
 extern crate iron;
 extern crate router;
 extern crate inth_oauth2;
+extern crate cookie;
+extern crate oven;
 
-use hubcaps::Github;
 use iron::prelude::*;
 use iron::status;
 use iron::headers::{ContentType, Location};
 use iron::modifiers::Header;
+
+use oven::prelude::*;
+use hubcaps::Github;
 use router::Router;
 use inth_oauth2::provider::GitHub;
 use inth_oauth2::token::Token;
 use std::env;
 
 fn main() {
+    let cookie_signing_key = env::var("SECRET")
+        .expect("SECRET must be specified to sign cookies").as_bytes().to_vec();
+
     let mut router = Router::new();
     router.get("/", |_: &mut Request| {
         Ok(Response::with((
@@ -45,23 +52,52 @@ fn main() {
         let (_, code) = query_params.into_iter().find(|&(ref key, _)| {
             *key == String::from("code")
         }).unwrap();
+
         let bearer_token = oauth_client.request_token(&Default::default(), code.trim()).unwrap();
 
-        let user_client = hyper::Client::new();
-        let user_github = Github::new(
-            "my-cool-user-agent/0.1.0",
-            &user_client,
-            Some(bearer_token.access_token()),
-        );
-        let repos = user_github.repos().list();
-
-        Ok(Response::with((
-            status::Ok,
-            format!("{:?}", repos),
-        )))
+        let redirect_uri = String::from("/repos");
+        let mut response = Response::with((
+            status::Found,
+            Header(Location(redirect_uri.clone())),
+            format!("You are being <a href='{}'>redirected</a>.", redirect_uri),
+        ));
+        response.set_cookie(cookie::Cookie::new(
+            String::from("access_token"), String::from(bearer_token.access_token())
+        ));
+        Ok(response)
     });
 
-    Iron::new(router).http("localhost:3000").unwrap();
+    router.get("/repos", |request: &mut Request| {
+        let access_token = request.get_cookie("access_token");
+        match access_token {
+            Some(token) => {
+                let user_client = hyper::Client::new();
+                let user_github = Github::new(
+                    "my-cool-user-agent/0.1.0",
+                    &user_client,
+                    Some(token.value.clone()),
+                );
+                let repos = user_github.repos().list();
+
+                Ok(Response::with((
+                    status::Ok,
+                    format!("{:?}", repos),
+                )))
+            },
+            None => { // Not logged in
+                let redirect_uri = String::from("/");
+                Ok(Response::with((
+                    status::Found,
+                    Header(Location(redirect_uri.clone())),
+                    format!("You are being <a href='{}'>redirected</a>.", redirect_uri),
+                )))
+            },
+        }
+    });
+
+    let mut chain = Chain::new(router);
+    chain.link(oven::new(cookie_signing_key));
+    Iron::new(chain).http("localhost:3000").unwrap();
 }
 
 fn github_client() -> inth_oauth2::Client<GitHub> {
