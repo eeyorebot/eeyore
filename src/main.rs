@@ -15,34 +15,12 @@ use inth_oauth2::token::Token;
 use std::env;
 
 fn main() {
-    let client = hyper::Client::new();
-    let github = Github::new(
-        "my-cool-user-agent/0.1.0",
-        &client,
-        None::<String>,
-        );
-
-    let repo = github.repo("rust-lang", "rust");
-
-    let labels = repo.labels();
-
-    let output = labels.list().unwrap().iter().map(|label| {
-        format!("{:?}", label)
-    }).collect::<Vec<_>>().join("\n");
-
     let mut router = Router::new();
     router.get("/", |_: &mut Request| {
         Ok(Response::with((
             status::Ok,
             Header(ContentType::html()),
-            "<html><body><div><a href='/oauth'>Log in with Github</a></div><div><a href='/labels'>List Rust's Labels</a></div></body></html>"
-        )))
-    });
-
-    router.get("/labels", move |_: &mut Request| {
-        Ok(Response::with((
-            status::Ok,
-            &output[..]
+            "<html><body><div><a href='/oauth'>Log in with Github</a></div></body></html>"
         )))
     });
 
