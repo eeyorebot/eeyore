@@ -71,17 +71,16 @@ fn main() {
         let access_token = request.get_cookie("access_token");
         match access_token {
             Some(token) => {
-                let user_client = hyper::Client::new();
-                let user_github = Github::new(
-                    "my-cool-user-agent/0.1.0",
-                    &user_client,
-                    Some(token.value.clone()),
-                );
-                let repos = user_github.repos().list();
+                let repos = authorized_repos(&token.value);
+
+                let output = repos.into_iter().map(|r| {
+                    format!("<tr><td>{}</td><td><a href='/enable?repo={}'>Enable</a></td><td><a href='/disable?repo={}'>Disable</a></td></tr>", r.full_name, r.full_name, r.full_name)
+                }).collect::<Vec<_>>().join("");
 
                 Ok(Response::with((
                     status::Ok,
-                    format!("{:?}", repos),
+                    Header(ContentType::html()),
+                    format!("<html><body><table>{}</table></body></html>", output),
                 )))
             },
             None => { // Not logged in
@@ -106,4 +105,17 @@ fn github_client() -> inth_oauth2::Client<GitHub> {
         env::var("CLIENT_SECRET").expect("Github OAuth CLIENT_SECRET must be specified"),
         env::var("REDIRECT_URI").ok()
     )
+}
+
+fn authorized_repos(access_token: &str) -> Vec<hubcaps::rep::Repo> {
+    let user_client = hyper::Client::new();
+    let user_github = Github::new(
+        "my-cool-user-agent/0.1.0",
+        &user_client,
+        Some(access_token),
+    );
+    let repos = user_github.repos().list().unwrap();
+    // TODO: filter to only return repositories on which the user has admin permissions
+    // TODO: paginate to get all repos, not currently supported by hubcaps
+    repos
 }
