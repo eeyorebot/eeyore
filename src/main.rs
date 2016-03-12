@@ -72,33 +72,25 @@ fn main() {
     });
 
     router.get("/repos", |request: &mut Request| {
-        let access_token = request.get_cookie("access_token");
-        match access_token {
-            Some(token) => {
-                let repos = authorized_repos(&token.value);
-                let mut data: BTreeMap<String, Json> = BTreeMap::new();
+        let access_token = match request.get_cookie("access_token") {
+            Some(token) => token.value.clone(),
+            None        => return not_logged_in(),
+        };
 
-                let repo_data = repos.into_iter().map(|r| {
-                    let mut d = BTreeMap::new();
-                    d.insert(String::from("full_name"), r.full_name.to_json());
-                    d
-                }).collect::<Vec<_>>();
-                data.insert(String::from("repos"), repo_data.to_json());
+        let repos = authorized_repos(&access_token);
+        let mut data: BTreeMap<String, Json> = BTreeMap::new();
 
-                Ok(Response::with((
-                    status::Ok,
-                    Template::new("repos", data),
-                )))
-            },
-            None => { // Not logged in
-                let redirect_uri = String::from("/");
-                Ok(Response::with((
-                    status::Found,
-                    Header(Location(redirect_uri.clone())),
-                    format!("You are being <a href='{}'>redirected</a>.", redirect_uri),
-                )))
-            },
-        }
+        let repo_data = repos.into_iter().map(|r| {
+            let mut d = BTreeMap::new();
+            d.insert(String::from("full_name"), r.full_name.to_json());
+            d
+        }).collect::<Vec<_>>();
+        data.insert(String::from("repos"), repo_data.to_json());
+
+        Ok(Response::with((
+            status::Ok,
+            Template::new("repos", data),
+        )))
     });
 
     let mut chain = Chain::new(router);
@@ -135,4 +127,15 @@ fn authorized_repos(access_token: &str) -> Vec<hubcaps::rep::Repo> {
     // TODO: filter to only return repositories on which the user has admin permissions
     // TODO: paginate to get all repos, not currently supported by hubcaps
     repos
+}
+
+fn not_logged_in() -> Result<Response, iron::error::IronError> {
+    // TODO: add some indication that you've been redirected because you weren't
+    // signed in and we needed you to be
+    let redirect_uri = String::from("/");
+    Ok(Response::with((
+        status::Found,
+        Header(Location(redirect_uri.clone())),
+        format!("You are being <a href='{}'>redirected</a>.", redirect_uri),
+    )))
 }
