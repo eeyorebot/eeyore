@@ -104,7 +104,7 @@ fn main() {
         panic!("{:?}", r);
     }
     chain.link_after(hbse);
-
+    println!("Server running at http://localhost:3000/");
     Iron::new(chain).http("localhost:3000").unwrap();
 }
 
