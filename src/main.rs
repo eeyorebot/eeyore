@@ -40,13 +40,8 @@ fn main() {
 
     router.get("/oauth", |_: &mut Request| {
         let oauth_client = github_client();
-
         let auth_uri = oauth_client.auth_uri(Some("write:repo_hook,public_repo"), None).unwrap();
-        Ok(Response::with((
-            status::Found,
-            Header(Location(auth_uri.to_string())),
-            format!("You are being <a href='{}'>redirected</a>.", auth_uri),
-        )))
+        Ok(redirect_response(auth_uri.to_string()))
     });
 
     router.get("/callback", |request: &mut Request| {
@@ -59,12 +54,7 @@ fn main() {
         let oauth_client = github_client();
         let bearer_token = oauth_client.request_token(&Default::default(), code.trim()).unwrap();
 
-        let redirect_uri = String::from("/repos");
-        let mut response = Response::with((
-            status::Found,
-            Header(Location(redirect_uri.clone())),
-            format!("You are being <a href='{}'>redirected</a>.", redirect_uri),
-        ));
+        let mut response = redirect_response(String::from("/repos"));
         response.set_cookie(cookie::Cookie::new(
             String::from("access_token"), String::from(bearer_token.access_token())
         ));
@@ -132,10 +122,13 @@ fn authorized_repos(access_token: &str) -> Vec<hubcaps::rep::Repo> {
 fn not_logged_in() -> Result<Response, iron::error::IronError> {
     // TODO: add some indication that you've been redirected because you weren't
     // signed in and we needed you to be
-    let redirect_uri = String::from("/");
-    Ok(Response::with((
+    Ok(redirect_response(String::from("/")))
+}
+
+fn redirect_response(redirect_uri: String) -> Response {
+    Response::with((
         status::Found,
         Header(Location(redirect_uri.clone())),
         format!("You are being <a href='{}'>redirected</a>.", redirect_uri),
-    )))
+    ))
 }
