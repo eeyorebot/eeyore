@@ -7,12 +7,13 @@ extern crate cookie;
 extern crate oven;
 extern crate handlebars_iron as hbs;
 extern crate rustc_serialize;
+extern crate params;
 
 use iron::prelude::*;
 use iron::status;
 use iron::headers::{ContentType, Location};
 use iron::modifiers::Header;
-
+use params::Params;
 use oven::prelude::*;
 use hubcaps::Github;
 use router::Router;
@@ -49,16 +50,13 @@ fn main() {
     });
 
     router.get("/callback", |request: &mut Request| {
+        let params = request.get_ref::<Params>().unwrap();
+        let code = match *params.get("code").unwrap() {
+            params::Value::String(ref value) => value,
+            _ => panic!("No oauth code found in request."),
+        };
+
         let oauth_client = github_client();
-
-        let url = request.url.clone();
-        let generic_url = url.into_generic_url();
-
-        let query_params = generic_url.query_pairs().unwrap();
-        let (_, code) = query_params.into_iter().find(|&(ref key, _)| {
-            *key == String::from("code")
-        }).unwrap();
-
         let bearer_token = oauth_client.request_token(&Default::default(), code.trim()).unwrap();
 
         let redirect_uri = String::from("/repos");
