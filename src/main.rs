@@ -5,6 +5,8 @@ extern crate router;
 extern crate inth_oauth2;
 extern crate cookie;
 extern crate oven;
+extern crate handlebars_iron as hbs;
+extern crate rustc_serialize;
 
 use iron::prelude::*;
 use iron::status;
@@ -16,7 +18,11 @@ use hubcaps::Github;
 use router::Router;
 use inth_oauth2::provider::GitHub;
 use inth_oauth2::token::Token;
+use hbs::{HandlebarsEngine, Template, DirectorySource};
+use rustc_serialize::json::{Json, ToJson};
+
 use std::env;
+use std::collections::BTreeMap;
 
 fn main() {
     let cookie_signing_key = env::var("SECRET")
@@ -72,15 +78,18 @@ fn main() {
         match access_token {
             Some(token) => {
                 let repos = authorized_repos(&token.value);
+                let mut data: BTreeMap<String, Json> = BTreeMap::new();
 
-                let output = repos.into_iter().map(|r| {
-                    format!("<tr><td>{}</td><td><a href='/enable?repo={}'>Enable</a></td><td><a href='/disable?repo={}'>Disable</a></td></tr>", r.full_name, r.full_name, r.full_name)
-                }).collect::<Vec<_>>().join("");
+                let repo_data = repos.into_iter().map(|r| {
+                    let mut d = BTreeMap::new();
+                    d.insert(String::from("full_name"), r.full_name.to_json());
+                    d
+                }).collect::<Vec<_>>();
+                data.insert(String::from("repos"), repo_data.to_json());
 
                 Ok(Response::with((
                     status::Ok,
-                    Header(ContentType::html()),
-                    format!("<html><body><table>{}</table></body></html>", output),
+                    Template::new("repos", data),
                 )))
             },
             None => { // Not logged in
@@ -95,7 +104,17 @@ fn main() {
     });
 
     let mut chain = Chain::new(router);
+
     chain.link(oven::new(cookie_signing_key));
+
+    let mut hbse = HandlebarsEngine::new2();
+    hbse.add(Box::new(DirectorySource::new("./src/templates/", ".hbs")));
+    // load templates from all registered sources
+    if let Err(r) = hbse.reload() {
+        panic!("{:?}", r);
+    }
+    chain.link_after(hbse);
+
     Iron::new(chain).http("localhost:3000").unwrap();
 }
 

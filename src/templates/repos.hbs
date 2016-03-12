@@ -1,0 +1,15 @@
+<html>
+<body>
+  <ul>
+  {{#each repos}}
+    <li class="repo">
+      <form action="/enablement" method="post">
+        <input type="hidden" name="repo" value="{{ full_name }}" />
+        <span class="repo-name">{{ full_name }}</span>
+        <button type="submit">Enable</button>
+      </form>
+    </li>
+  {{/each}}
+  </ul>
+</body>
+</html>
