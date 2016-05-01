@@ -87,7 +87,7 @@ fn main() {
 
     chain.link(oven::new(cookie_signing_key));
 
-    let mut hbse = HandlebarsEngine::new2();
+    let mut hbse = HandlebarsEngine::new();
     hbse.add(Box::new(DirectorySource::new("./src/templates/", ".hbs")));
     // load templates from all registered sources
     if let Err(r) = hbse.reload() {
