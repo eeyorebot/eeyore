@@ -15,7 +15,6 @@ use iron::headers::{ContentType, Location};
 use iron::modifiers::Header;
 use params::Params;
 use oven::prelude::*;
-use hubcaps::Github;
 use router::Router;
 use inth_oauth2::provider::GitHub;
 use inth_oauth2::token::Token;
@@ -108,10 +107,10 @@ fn github_client() -> inth_oauth2::Client<GitHub> {
 
 fn authorized_repos(access_token: &str) -> Vec<hubcaps::rep::Repo> {
     let user_client = hyper::Client::new();
-    let user_github = Github::new(
+    let user_github = hubcaps::Github::new(
         "my-cool-user-agent/0.1.0",
         &user_client,
-        Some(access_token),
+        hubcaps::Credentials::Token(access_token.to_string())
     );
     let repos = user_github.repos().list().unwrap();
     // TODO: filter to only return repositories on which the user has admin permissions
