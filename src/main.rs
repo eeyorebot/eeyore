@@ -112,7 +112,7 @@ fn authorized_repos(access_token: &str) -> Vec<hubcaps::rep::Repo> {
         &user_client,
         hubcaps::Credentials::Token(access_token.to_string())
     );
-    let repos = user_github.repos().list().unwrap();
+    let repos = user_github.repos().list(&Default::default()).unwrap();
     // TODO: filter to only return repositories on which the user has admin permissions
     // TODO: paginate to get all repos, not currently supported by hubcaps
     repos
