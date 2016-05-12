@@ -8,6 +8,7 @@ extern crate oven;
 extern crate handlebars_iron as hbs;
 extern crate rustc_serialize;
 extern crate params;
+extern crate dotenv;
 
 use iron::prelude::*;
 use iron::status;
@@ -20,11 +21,14 @@ use inth_oauth2::provider::GitHub;
 use inth_oauth2::token::Token;
 use hbs::{HandlebarsEngine, Template, DirectorySource};
 use rustc_serialize::json::{Json, ToJson};
+use dotenv::dotenv;
 
 use std::env;
 use std::collections::BTreeMap;
 
 fn main() {
+    dotenv().ok();
+
     let cookie_signing_key = env::var("SECRET")
         .expect("SECRET must be specified to sign cookies").as_bytes().to_vec();
 
