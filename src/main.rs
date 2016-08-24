@@ -15,7 +15,7 @@ use iron::status;
 use iron::headers::{ContentType, Location};
 use iron::modifiers::Header;
 use params::Params;
-use oven::prelude::*;
+use oven::{RequestExt, ResponseExt};
 use router::Router;
 use inth_oauth2::provider::GitHub;
 use inth_oauth2::token::Token;
