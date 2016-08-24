@@ -7,7 +7,7 @@ license = "MIT/Apache-2.0"
 
 [dependencies]
 hyper = "*"
-hubcaps = { git = "https://github.com/carols10cents/hubcaps", branch = "collabs" }
+hubcaps = { git = "https://github.com/carols10cents/hubcaps", branch = "eeyore" }
 iron = "*"
 router = "*"
 inth-oauth2 = "*"
