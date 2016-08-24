@@ -2,7 +2,7 @@
 name = "eeyore"
 version = "0.1.0"
 dependencies = [
- "cookie 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cookie 0.2.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "dotenv 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "handlebars-iron 0.18.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "hubcaps 0.2.2 (git+https://github.com/carols10cents/hubcaps?branch=collabs)",
@@ -78,17 +78,6 @@ dependencies = [
 [[package]]
 name = "cookie"
 version = "0.2.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "openssl 0.7.14 (registry+https://github.com/rust-lang/crates.io-index)",
- "rustc-serialize 0.3.19 (registry+https://github.com/rust-lang/crates.io-index)",
- "time 0.1.35 (registry+https://github.com/rust-lang/crates.io-index)",
- "url 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "cookie"
-version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "openssl 0.7.14 (registry+https://github.com/rust-lang/crates.io-index)",
