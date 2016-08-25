@@ -52,6 +52,24 @@ themselves needing commit bit. In other words:
 2. You tell Eeyore who can triage your project.
 3. Those users use Eeyore to do issue triage, and he does it on their behalf.
 
+## Setting up Developer environment
+
+- Setup a new GitHub OAuth application via this [link](https://github.com/settings/applications/new).
+- Fill out all the details on the form, the `Authorized callback URL` will be `http://localhost:3000/callback`.
+- Keep the results page open, you'll need the client id and client secret for the next step.
+- `git clone https://github.com/eeyorebot/eeyore`
+
+```
+cat << EEYORE_EOF > ~/.env.eeyore
+export SECRET=something_secure
+export CLIENT_ID=github_client_id
+export CLIENT_SECRET=github_secret
+EEYORE_EOF
+vi ~/.env.eeyore # update with correct values
+source ~/.env.eeyore
+```
+- `cargo run`
+
 ## Acknowledgements
 
 * Thank you to flickr user jdhancock for the [photo of eeyore](https://www.flickr.com/photos/jdhancock/7767340604)!
