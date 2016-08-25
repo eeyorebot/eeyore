@@ -7,7 +7,7 @@ other quotes, and how you feel when doing issue triage:
 > Eeyore: It’s all for naught.
 
 > Winnie the Pooh: How long will that take?  
-> Eeyore: Days. Weeks. Months. Who knows? 
+> Eeyore: Days. Weeks. Months. Who knows?
 
 > Eeyore: Wish I could say yes, but I can’t.  
 
@@ -18,11 +18,11 @@ other quotes, and how you feel when doing issue triage:
 > "So it is."  
 > "And freezing."  
 > "Is it?"  
-> "Yes," said Eeyore. "However," he said, brightening up a little, "we 
+> "Yes," said Eeyore. "However," he said, brightening up a little, "we
 > haven't had an earthquake lately."
 
 > "Good morning, Eeyore," said Pooh.  
-> "Good morning, Pooh Bear," said Eeyore gloomily. "If it is a good 
+> "Good morning, Pooh Bear," said Eeyore gloomily. "If it is a good
 > morning, which I doubt," said he.
 
 > Roo: Don't you ever get sick of your house falling down all the time, Eeyore?  
@@ -51,6 +51,34 @@ themselves needing commit bit. In other words:
 1. You give Eeyore commit bit on your project.
 2. You tell Eeyore who can triage your project.
 3. Those users use Eeyore to do issue triage, and he does it on their behalf.
+
+## Seting up Developer environment
+
+### Tokens
+
+- setup a new OAuth application via this [link](https://github.com/settings/applications/new).
+- Fill out all the details on the form, Authorized callback URL will be `http://localhost:3000/callback`.
+- keep the results page open, you'll need the client id and client secret for the next step.
+
+### build and test
+
+> Block quote are my questions for  @carol10cents and @steveklabnik.
+>
+> Might be a good idea to namespace env vars e.g. `EEYORE_CLIENT_ID`? The alternative would be to specify the vars at run time i.e. `SECRET=adad CLIENT_ID=asdasd cargo run`?
+>
+
+```
+git clone hhttps://github.com/eeyorebot/eeyore
+cat << EEYORE_EOF > ~/.env.eeyore
+export SECRET=something_secure
+export CLIENT_ID=github_client_id
+export CLIENT_SECRET=github_secret
+EEYORE_EOF
+vi ~/.env.eeyore # update with correct values
+source ~/.env.eeyore
+cargo build
+cargo run
+```
 
 ## Acknowledgements
 
