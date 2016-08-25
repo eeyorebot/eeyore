@@ -52,34 +52,6 @@ themselves needing commit bit. In other words:
 2. You tell Eeyore who can triage your project.
 3. Those users use Eeyore to do issue triage, and he does it on their behalf.
 
-## Seting up Developer environment
-
-### Tokens
-
-- setup a new OAuth application via this [link](https://github.com/settings/applications/new).
-- Fill out all the details on the form, Authorized callback URL will be `http://localhost:3000/callback`.
-- keep the results page open, you'll need the client id and client secret for the next step.
-
-### build and test
-
-> Block quote are my questions for  @carol10cents and @steveklabnik.
->
-> Might be a good idea to namespace env vars e.g. `EEYORE_CLIENT_ID`? The alternative would be to specify the vars at run time i.e. `SECRET=adad CLIENT_ID=asdasd cargo run`?
->
-
-```
-git clone hhttps://github.com/eeyorebot/eeyore
-cat << EEYORE_EOF > ~/.env.eeyore
-export SECRET=something_secure
-export CLIENT_ID=github_client_id
-export CLIENT_SECRET=github_secret
-EEYORE_EOF
-vi ~/.env.eeyore # update with correct values
-source ~/.env.eeyore
-cargo build
-cargo run
-```
-
 ## Acknowledgements
 
 * Thank you to flickr user jdhancock for the [photo of eeyore](https://www.flickr.com/photos/jdhancock/7767340604)!
