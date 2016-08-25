@@ -52,33 +52,31 @@ themselves needing commit bit. In other words:
 2. You tell Eeyore who can triage your project.
 3. Those users use Eeyore to do issue triage, and he does it on their behalf.
 
-## Setup developer environment
+## Seting up Developer environment
 
-
-### github
+### Tokens
 
 - setup a new OAuth application via this [link](https://github.com/settings/applications/new).
-  - Fill out the form, Authorized callback URL will be `http://localhost:3000/callback`
-- keep the results page open, you'll need the client id and client secret for the next step
+- Fill out all the details on the form, Authorized callback URL will be `http://localhost:3000/callback`.
+- keep the results page open, you'll need the client id and client secret for the next step.
 
 ### build and test
 
-> Block quote are my questions for  @carol10cents and @steveklabnik
-> Does it need nightly? Managed to run in stable so far.
+> Block quote are my questions for  @carol10cents and @steveklabnik.
 >
-> Might be a good idea to namespace env vars? unless we use `SECRET=adad CLIENT_ID=asdasd cargo run`?
+> Might be a good idea to namespace env vars e.g. `EEYORE_CLIENT_ID`? The alternative would be to specify the vars at run time i.e. `SECRET=adad CLIENT_ID=asdasd cargo run`?
+>
 
 ```
 git clone hhttps://github.com/eeyorebot/eeyore
 cat << EEYORE_EOF > ~/.env.eeyore
-export EEYORE_SECRET=something_secure
-export EEYORE_CLIENT_ID=github_client_id
-export EEYORE_CLIENT_SECRET=github_secret
+export SECRET=something_secure
+export CLIENT_ID=github_client_id
+export CLIENT_SECRET=github_secret
 EEYORE_EOF
 vi ~/.env.eeyore # update with correct values
 source ~/.env.eeyore
 cargo build
-cargo test
 cargo run
 ```
 
