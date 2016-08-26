@@ -55,20 +55,21 @@ themselves needing commit bit. In other words:
 ## Setting up Developer environment
 
 - Setup a new GitHub OAuth application via this [link](https://github.com/settings/applications/new).
-- Fill out all the details on the form, the `Authorized callback URL` will be `http://localhost:3000/callback`.
+- Fill out all the details on the form, the _Authorized callback URL_ will be http://localhost:3000/callback.
 - Keep the results page open, you'll need the client id and client secret for the next step.
-- `git clone https://github.com/eeyorebot/eeyore`
 
 ```
-cat << EEYORE_EOF > ~/.env.eeyore
+git clone https://github.com/eeyorebot/eeyore
+cd eeyore
+cat << EEYORE_EOF > .env
 export SECRET=something_secure
 export CLIENT_ID=github_client_id
 export CLIENT_SECRET=github_secret
 EEYORE_EOF
-vi ~/.env.eeyore # update with correct values
-source ~/.env.eeyore
+vi .env.eeyore # update with correct values, it's okay we've in .gitignore
+cargo run
 ```
-- `cargo run`
+
 
 ## Acknowledgements
 
