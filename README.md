@@ -62,11 +62,11 @@ themselves needing commit bit. In other words:
 git clone https://github.com/eeyorebot/eeyore
 cd eeyore
 cat << EEYORE_EOF > .env
-export SECRET=something_secure
-export CLIENT_ID=github_client_id
-export CLIENT_SECRET=github_secret
+SECRET=something_secure
+CLIENT_ID=github_client_id
+CLIENT_SECRET=github_secret
 EEYORE_EOF
-vi .env.eeyore # update with correct values, it's okay we've in .gitignore
+vi .env # update with correct values, it's okay we've in .gitignore
 cargo run
 ```
 
